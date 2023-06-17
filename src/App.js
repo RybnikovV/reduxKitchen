@@ -1,25 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCashAction, getCashAction } from './store/bankAccaunt';
+import { addUserAction } from './store/users';
+import { useEffect, useRef } from 'react';
+import { fetchUsers } from './asyncAction/users';
 
 function App() {
+  const dispatch = useDispatch();
+  const bankAccaunt = useSelector(state => state.bankAccaunt);
+  const bankUsers = useSelector(state => state.bankUsers);
+  const refComponentCalled = useRef(false);
+
+  useEffect(()=> {
+    refComponentCalled.current || dispatch(fetchUsers());
+    refComponentCalled.current = true;
+  }, []);
+
+  const addCash = () => {
+    dispatch(addCashAction(1));
+  };
+
+  const getCash = () => {
+    dispatch(getCashAction(1));
+  };
+
+  const addUser = (name) => {
+    dispatch(addUserAction(name))
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <div>
+        {bankAccaunt ? 
+          bankAccaunt.cash :
+          "Банковский счет отсутствует" }
+      </div>
+      <button
+        onClick={addCash}>
+        Добавить
+      </button>
+      <button
+        onClick={getCash}>
+        Снять
+      </button>
+      <hr/>
+      <button
+        onClick={() => addUser(prompt())}>
+        Добавить пользователя
+      </button>
+      <div>
+        {bankUsers.map(i => <div key={i.id}>{i.name}</div>)}
+      </div>
+    </>
+  )
 }
 
 export default App;
