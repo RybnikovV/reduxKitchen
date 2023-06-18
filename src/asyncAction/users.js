@@ -7,3 +7,7 @@ export const fetchUsers = () => {
       .then(json => dispath(addUsersAction(json)))
   }
 };
+
+export const fetchUsersSaga = () => {
+  return fetch('https://jsonplaceholder.typicode.com/users?_limit=5')
+};
