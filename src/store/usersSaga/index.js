@@ -12,10 +12,9 @@ export const sagaBankUsersReducer = (state = defaultUsers, action ) => {
   }
 };
 
-export const sagaAddUsersAction = (users) => {
+export const sagaAddUsersCreator = (users) => {
   return { type: SAGA_ADD_USERS, payload: users }
 };
-
-export const sagaFetchUsersAction = () => {
+export const sagaFetchUsersCreator = () => {
   return { type: SAGA_FETCH_USERS }
 };

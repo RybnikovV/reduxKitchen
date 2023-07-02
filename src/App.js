@@ -1,9 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addCashAction, getCashAction } from './store/bankAccaunt';
-import { addUserAction, addUsersActionSaga } from './store/users';
+import { addCashCreator,
+   getCashCreator,
+   getCashAsyncCreator,
+   addCashAsyncCreator } from './store/bankAccaunt';
+import { addUserCreator } from './store/users';
 import { useEffect, useRef } from 'react';
 import { fetchUsers } from './asyncAction/users';
-import { sagaFetchUsersAction } from './store/usersSaga';
+import { sagaFetchUsersCreator } from './store/usersSaga';
 
 function App() {
   const dispatch = useDispatch();
@@ -18,19 +21,27 @@ function App() {
   }, []);
 
   const addCash = () => {
-    dispatch(addCashAction(1));
+    dispatch(addCashCreator(1));
   };
 
   const getCash = () => {
-    dispatch(getCashAction(1));
+    dispatch(getCashCreator(1));
   };
 
   const addUser = (name) => {
-    dispatch(addUserAction(name))
+    dispatch(addUserCreator(name))
   }
 
   const sagaAddUsers = () => {
-    dispatch(sagaFetchUsersAction())
+    dispatch(sagaFetchUsersCreator())
+  }
+
+  const asyncIncrementCounter = () => {
+    dispatch(addCashAsyncCreator(Number(prompt('Введите число'))))
+  }
+
+  const asyncDecrementCounter = () => {
+    dispatch(getCashAsyncCreator(Number(prompt('Введите число'))))
   }
 
   return (
@@ -57,7 +68,8 @@ function App() {
         {bankUsers.map(i => <div key={i.id}>{i.name}</div>)}
       </div>
       <hr/>
-      <h2>Asynx wich redux-saga</h2>
+      <h2>Async wich redux-saga</h2>
+      <h3>Async call of users</h3>
       <button
         onClick={sagaAddUsers}>
         Добавить пользователей
@@ -69,6 +81,13 @@ function App() {
             <div>Пользователи отсутствуют</div>
         }
       </div>
+      <h3>Async counter = {bankAccaunt.cash}</h3>
+      <button onClick={asyncIncrementCounter}>
+        increment
+      </button>
+      <button onClick={asyncDecrementCounter}>
+        decrement
+      </button>
     </>
   )
 }

@@ -1,10 +1,10 @@
-import { addUsersAction } from '../store/users';
+import { addUsersCreator } from '../store/users';
 
 export const fetchUsers = () => {
   return dispath => {
     fetch('https://jsonplaceholder.typicode.com/users')
       .then(response => response.json())
-      .then(json => dispath(addUsersAction(json)))
+      .then(usersData => dispath(addUsersCreator(usersData)))
   }
 };
 

@@ -5,10 +5,11 @@ import { bankUsersReducer } from './users';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk  from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
-import { usersWatcherSaga } from '../saga/userSaga';
+import { rootWatcher } from '../saga';
 import { sagaBankUsersReducer } from './usersSaga';
 
 const sagaMiddleware = createSagaMiddleware();
+const middleware = [sagaMiddleware];
 
 const rootReducer = combineReducers({
   bankAccaunt: bankAccauntReducer,
@@ -16,9 +17,20 @@ const rootReducer = combineReducers({
   sagaBankUsers: sagaBankUsersReducer, 
 });
 
-export const store = createStore(
-  rootReducer, 
-  composeWithDevTools(applyMiddleware(thunk, sagaMiddleware))
-);
 
-sagaMiddleware.run(usersWatcherSaga);
+//first way to create store, async by thunk
+// export const store = createStore(
+//   rootReducer, 
+//   composeWithDevTools(applyMiddleware(thunk, sagaMiddleware))
+// );
+
+//second way to create storee, async by saga
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware().concat(middleware)
+  }
+});
+
+
+sagaMiddleware.run(rootWatcher);

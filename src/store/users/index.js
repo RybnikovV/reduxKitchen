@@ -14,13 +14,12 @@ export const bankUsersReducer = (state = defaultUsers, action ) => {
   }
 };
 
-export const addUserAction = (name, id = new Date().getTime()) => {
+export const addUserCreator = (name, id = new Date().getTime()) => {
   return {
     type: ADD_USER,
     payload: {id, name}
   }
 };
-
-export const addUsersAction = (users) => {
+export const addUsersCreator = (users) => {
   return { type: ADD_USERS, payload: users }
 };
