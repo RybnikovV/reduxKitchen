@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useTypedDispatch } from './hooks/useTypedDispatch';
 import { addCashCreator,
    getCashCreator,
    getCashAsyncCreator,
@@ -7,13 +7,17 @@ import { addUserCreator } from './store/users';
 import { useEffect, useRef } from 'react';
 import { fetchUsers } from './asyncAction/users';
 import { sagaFetchUsersCreator } from './store/usersSaga';
+import { useTypedSelector } from './hooks/useTypedSelector';
 
 function App() {
-  const dispatch = useDispatch();
-  const bankAccaunt = useSelector(state => state.bankAccaunt);
-  const bankUsers = useSelector(state => state.bankUsers);
+  const dispatch = useTypedDispatch();
+  const bankAccaunt = useTypedSelector(state => state.bankAccaunt);
+  const bankUsers = useTypedSelector(state => state.bankUsers.users);
+  const bankUsersErr = useTypedSelector(state => state.bankUsers.err);
+  const bankUsersLoading = useTypedSelector(state => state.bankUsers.loading);
+  // const { users, err, loading } = useTypedSelector(state => state.bankUsers);
+  const sagaBankUsers = useTypedSelector(state => state.sagaBankUsers);
   const refComponentCalled = useRef(false);
-  const sagaBankUsers = useSelector(state => state.sagaBankUsers);
 
   useEffect(()=> {
     refComponentCalled.current || dispatch(fetchUsers());
@@ -28,7 +32,7 @@ function App() {
     dispatch(getCashCreator(1));
   };
 
-  const addUser = (name) => {
+  const addUser = (name: string) => {
     dispatch(addUserCreator(name))
   }
 
@@ -61,11 +65,14 @@ function App() {
       </button>
       <hr/>
       <button
-        onClick={() => addUser(prompt())}>
+        onClick={() => addUser(prompt("Введите имя", "Николай") || "")}>
         Добавить пользователя
       </button>
       <div>
-        {bankUsers.map(i => <div key={i.id}>{i.name}</div>)}
+        {
+          !bankUsersLoading ? 
+            bankUsers.map(i => <div key={i.id}>{i.name}</div>) : <div>Загрузка!</div>
+        }
       </div>
       <hr/>
       <h2>Async wich redux-saga</h2>

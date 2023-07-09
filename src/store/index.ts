@@ -17,14 +17,13 @@ const rootReducer = combineReducers({
   sagaBankUsers: sagaBankUsersReducer, 
 });
 
-
 //first way to create store, async by thunk
 // export const store = createStore(
 //   rootReducer, 
 //   composeWithDevTools(applyMiddleware(thunk, sagaMiddleware))
 // );
 
-//second way to create storee, async by saga
+//second way to create store, async by saga
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) => {
@@ -32,5 +31,7 @@ export const store = configureStore({
   }
 });
 
+export type RootReducer = ReturnType<typeof rootReducer>;
+export type AppDispatch = typeof store.dispatch;
 
 sagaMiddleware.run(rootWatcher);

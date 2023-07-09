@@ -1,10 +1,14 @@
-import { addUsersCreator } from '../store/users';
+import { addUsersCreator, fetchUserCreator, fetchErrorCreator } from '../store/users';
+import { Dispatch } from 'redux';
+import { UserAction } from '../types/users'; 
 
 export const fetchUsers = () => {
-  return dispath => {
+  return (dispath: Dispatch<UserAction>) => {
+    dispath(fetchUserCreator());
     fetch('https://jsonplaceholder.typicode.com/users')
       .then(response => response.json())
       .then(usersData => dispath(addUsersCreator(usersData)))
+      .catch(err => dispath(fetchErrorCreator(err.message)))
   }
 };
 

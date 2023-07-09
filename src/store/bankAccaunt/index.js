@@ -1,5 +1,5 @@
 const defaultState = {
-  cash: 0
+  cash: 0,
 };
 
 const ADD_CASH = "ADD_CASH";
@@ -21,4 +21,4 @@ export const bankAccauntReducer = (state = defaultState, action) => {
 export const addCashCreator = (cash) => ({type: ADD_CASH, payload: cash});
 export const getCashCreator = (cash) => ({type: GET_CASH, payload: cash});
 export const getCashAsyncCreator = (cash) => ({type: GET_CASH_ASYNC, payload: cash});
-export const addCashAsyncCreator = (cash) => ({type: ADD_CASH_ASYNC, payload: cash}); 
+export const addCashAsyncCreator = (cash) => ({type: ADD_CASH_ASYNC, payload: cash});
